@@ -6,8 +6,8 @@
 
 #define INF INT_MAX
 
-#define WIN 1
-#define LOSE -1
+#define WIN 5
+#define LOSE -5
 #define NO_RESULT 0
 
 int get_board_val(Player desired_winner){
@@ -34,11 +34,13 @@ int get_min(int y, int z){
     return z;
 }
 
-int minimax(int depth, int maximise){
-    int current_score = get_board_val(OPPONENT);
+int minimax(int depth, int maximise, Player desired_winner){
+    int current_score = get_board_val(desired_winner);
+
     if(current_score != NO_RESULT){
         return current_score;
     }
+
     /*if(!spaces_left()){
         return NO_RESULT;
     }*/
@@ -48,11 +50,11 @@ int minimax(int depth, int maximise){
         top_score = -INF;
         for(int y=0 ; y<BOARD_Y ; y++){
             for(int x=0 ; x<BOARD_X ; x++){
-                Point p = {x, y};
+                Pt p = {x, y};
                 if(bget(p) == NONE){
-                    bset(p, OPPONENT);
+                    bset(p, desired_winner);
 
-                    top_score = get_max(top_score, minimax(depth+1, !maximise));
+                    top_score = get_max(top_score, minimax(depth+1, !maximise, desired_winner));
 
                     bset(p, NONE);
                 }
@@ -63,11 +65,11 @@ int minimax(int depth, int maximise){
         top_score = INF;
         for(int y=0 ; y<BOARD_Y ; y++){
             for(int x=0 ; x<BOARD_X ; x++){
-                Point p = {x, y};
+                Pt p = {x, y};
                 if(bget(p) == NONE){
-                    bset(p, OPPONENT);
+                    bset(p, desired_winner);
 
-                    top_score = get_min(top_score, minimax(depth+1, !maximise));
+                    top_score = get_min(top_score, minimax(depth+1, !maximise, desired_winner));
 
                     bset(p, NONE);
                 }
@@ -77,18 +79,18 @@ int minimax(int depth, int maximise){
     return top_score;
 }
 
-Point opp_move(){
+Pt opp_move(Player desired_winner){
     int best = -INF;
-    Point best_move;
+    Pt best_move;
     int mv;
 
     for(int y=0 ; y<BOARD_Y ; y++){
         for(int x=0 ; x<BOARD_X ; x++){
-            Point p = {x, y};
+            Pt p = {x, y};
             if(bget(p) == NONE){
-                bset(p, OPPONENT);
+                bset(p, desired_winner);
 
-                mv = minimax(0, 0);
+                mv = minimax(0, 0, desired_winner);
 
                 bset(p, NONE);
 
@@ -99,6 +101,5 @@ Point opp_move(){
             }
         }
     }
-    printf("Best move: %i\n", best);
     return best_move;
 }

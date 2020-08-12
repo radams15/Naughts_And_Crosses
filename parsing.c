@@ -33,12 +33,14 @@ int* split_points(char* str){
     return out;
 }
 
-Point get_point(char* prompt){
-    printf("%s", prompt);
+Pt get_point(char* prompt){
+    if(strlen(prompt) != 0) {
+        printf("%s", prompt);
+    }
     char* raw = read_points();
 
     int* points = split_points(raw);
-    Point p;
+    Pt p;
     p.x = points[0];
     p.y = points[1];
     free(points);

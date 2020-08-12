@@ -2,7 +2,7 @@
 // Created by rhys on 11/08/2020.
 //
 
-#define Point struct point
+#define Pt struct point
 
 struct point{
     int x;

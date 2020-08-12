@@ -6,14 +6,16 @@
 #include "board.c"
 #include "opponent.c"
 
+#include "gui.c"
+
 int go(Player player){
     if(player == OPPONENT){
-        Point opp_pt = opp_move();
-        bset(opp_pt, OPPONENT);
+        Pt opp_pt = opp_move(OPPONENT);
+        bset(opp_pt, player);
 
         print_board();
     }else if(player == PLAYER){
-        move(PLAYER);
+        move_player(player);
 
         print_board();
     }
@@ -27,9 +29,7 @@ int go(Player player){
     return 0;
 }
 
-int main() {
-    init_board();
-
+void cli(){
     int current = OPPONENT;
 
     while(1) {
@@ -40,6 +40,12 @@ int main() {
 
         current = current == PLAYER ? OPPONENT : PLAYER;
     }
+}
+
+int main() {
+    init_board();
+
+    gui();
 
     free_board();
     return 0;

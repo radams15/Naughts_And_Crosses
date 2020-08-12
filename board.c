@@ -22,7 +22,7 @@ enum Letters{
 
     X_CHR = 'X',
     O_CHR = 'O',
-    NONE_CHR = ' '
+    NONE_CHR = '_'
 };
 
 void init_board(){
@@ -49,13 +49,13 @@ char translate_letter(Player letter){
     }
 }
 
-void bset(Point p, int val){
+void bset(Pt p, int val){
     if((val == X || val == O || val == NONE) && (p.x >= 0) && (p.y >= 0) && (p.x <= BOARD_X) && (p.y <= BOARD_Y)) {
         board[p.y][p.x] = val;
     }
 }
 
-int bget(Point p){
+int bget(Pt p){
     if((p.x >= 0) && (p.y >= 0) && (p.x <= BOARD_X) && (p.y <= BOARD_Y)) {
         return board[p.y][p.x];
     }
@@ -63,7 +63,7 @@ int bget(Point p){
 }
 
 int bgetv(int x, int y){
-    Point p = {x, y};
+    Pt p = {x, y};
     return bget(p);
 }
 
@@ -71,21 +71,20 @@ void print_board(){
     printf("______________\n");
     for(int y=0 ; y<BOARD_Y ; y++){
         for(int x=0 ; x<BOARD_X ; x++){
-            Point p;
+            Pt p;
             p.x = x;
             p.y = y;
             printf("| %c ", translate_letter(bget(p)));
-            //printf("| %i ", bget(p));
         }
         printf("|\n");
     }
     printf("______________\n");
 }
 
-int move(Player player){
+int move_player(Player player){
     while(1) {
         printf("%c ", translate_letter(player));
-        Point p = get_point("=> ");
+        Pt p = get_point("=> ");
         if(p.x == FAIL && p.y == FAIL){
             printf("Please Enter A Valid Set Of Numbers\n");
             continue;
@@ -109,21 +108,25 @@ int move(Player player){
 
 Player get_winner(){
     for(int y=0 ; y<BOARD_Y ; y++){
-        if(bgetv(0, y) == bgetv(1, y) == bgetv(2, y) && bgetv(0, y) != NONE){
+        if(bgetv(0, y) == bgetv(1, y) == bgetv(2, y)   && bgetv(0, y) != NONE){
             return bgetv(0, y);
         }
     }
+
     for(int x=0 ; x<BOARD_X ; x++){
-        if(bgetv(x, 0) == bgetv(x, 1) == bgetv(x, 2)  && bgetv(x, 0) != NONE){
+        if(bgetv(x, 0) == bgetv(x, 1) == bgetv(x, 2)    && bgetv(x, 0) != NONE){
             return bgetv(x, 0);
         }
     }
-    if(bgetv(0, 0) == bgetv(1, 1) == bgetv(2, 2)  && bgetv(0, 0) != NONE){
+
+    if(bgetv(0, 0) == bgetv(1, 1) == bgetv(2, 2)    && bgetv(0, 0) != NONE){
         return bgetv(0, 0);
     }
-    if(bgetv(0, 2) == bgetv(1, 1) == bgetv(2, 0)  && bgetv(0, 2) != NONE){
+
+    if(bgetv(0, 2) == bgetv(1, 1) == bgetv(2, 0)    && bgetv(0, 2) != NONE){
         return bgetv(0, 2);
     }
+
     return NONE;
 }
 
@@ -132,7 +135,7 @@ int is_won(){
 }
 
 int spaces_left(){
-    board = calloc(BOARD_Y, sizeof(int*));
+    /*board = calloc(BOARD_Y, sizeof(int*));
 
     for(int y=0 ; y < BOARD_Y ; y++){
         board[y] = calloc(1, sizeof(int));
@@ -143,7 +146,8 @@ int spaces_left(){
             }
         }
     }
-    return 0;
+    return 0;*/
+    return !is_won();
 }
 
 
